@@ -33,28 +33,7 @@
 
 ### Diagrama local
 
-```plantuml
-@startuml
-left to right direction
-actor "Estudiante / Docente" as USR
-actor "Sistema de Autenticación" as SIS
-
-rectangle "CU-01: Registrarse" {
-  usecase "Registrarse" as UC1
-  usecase "Validar dominio institucional" as UC2
-  usecase "Cifrar contraseña" as UC3
-  usecase "Notificar registro exitoso" as UC4
-}
-
-USR --> UC1
-SIS --> UC2
-SIS --> UC3
-
-UC1 ..> UC2 : <<include>>
-UC1 ..> UC3 : <<include>>
-UC1 ..> UC4 : <<include>>
-@enduml
-```
+![](./CU-01.drawio.svg)
 
 ---
 
@@ -88,28 +67,7 @@ UC1 ..> UC4 : <<include>>
 
 ### Diagrama local
 
-```plantuml
-@startuml
-left to right direction
-actor "Estudiante / Docente / Admin" as USR
-actor "Sistema de Autenticación" as SIS
-
-rectangle "CU-02: Iniciar Sesión" {
-  usecase "Iniciar sesión" as UC1
-  usecase "Validar dominio institucional" as UC2
-  usecase "Generar token JWT" as UC3
-  usecase "Bloquear cuenta" as UC4
-}
-
-USR --> UC1
-SIS --> UC2
-SIS --> UC3
-
-UC1 ..> UC2 : <<include>>
-UC1 ..> UC3 : <<include>>
-UC1 ..> UC4 : <<extend>>
-@enduml
-```
+![](./CU-02.drawio.svg)
 
 ---
 
@@ -145,28 +103,7 @@ UC1 ..> UC4 : <<extend>>
 
 ### Diagrama local
 
-```plantuml
-@startuml
-left to right direction
-actor "Estudiante / Docente" as USR
-actor "Sistema de Autenticación" as SIS
-
-rectangle "CU-03: Recuperar Contraseña" {
-  usecase "Recuperar contraseña" as UC1
-  usecase "Validar dominio institucional" as UC2
-  usecase "Enviar enlace temporal" as UC3
-  usecase "Cifrar nueva contraseña" as UC4
-}
-
-USR --> UC1
-SIS --> UC2
-SIS --> UC3
-
-UC1 ..> UC2 : <<include>>
-UC1 ..> UC3 : <<extend>>
-UC1 ..> UC4 : <<include>>
-@enduml
-```
+![](./CU-03.drawio.svg)
 
 ---
 
@@ -199,27 +136,7 @@ UC1 ..> UC4 : <<include>>
 
 ### Diagrama local
 
-```plantuml
-@startuml
-left to right direction
-actor "Estudiante" as EST
-actor "Docente / Admin" as DOC
-
-rectangle "CU-04: Ver Catálogo" {
-  usecase "Ver catálogo" as UC1
-  usecase "Verificar cursos inscritos" as UC2
-  usecase "Buscar grabaciones" as UC3
-  usecase "Ver detalle de grabación" as UC4
-}
-
-EST --> UC1
-DOC --> UC1
-
-UC1 ..> UC2 : <<include>>
-UC1 ..> UC3 : <<include>>
-UC1 ..> UC4 : <<extend>>
-@enduml
-```
+![](./CU-04.drawio.svg)
 
 ---
 
@@ -251,31 +168,7 @@ UC1 ..> UC4 : <<extend>>
 
 ### Diagrama local
 
-```plantuml
-@startuml
-left to right direction
-actor "Estudiante / Docente / Admin" as USR
-
-rectangle "CU-05: Buscar y Filtrar Grabaciones" {
-  usecase "Buscar grabaciones" as UC1
-  usecase "Filtrar por semestre/año" as UC2
-  usecase "Filtrar por escuela" as UC3
-  usecase "Filtrar por curso" as UC4
-  usecase "Filtrar por catedrático" as UC5
-  usecase "Filtrar por tema/etiqueta" as UC6
-  usecase "Ordenar resultados" as UC7
-}
-
-USR --> UC1
-
-UC1 ..> UC2 : <<include>>
-UC1 ..> UC3 : <<include>>
-UC1 ..> UC4 : <<include>>
-UC1 ..> UC5 : <<include>>
-UC1 ..> UC6 : <<extend>>
-UC1 ..> UC7 : <<extend>>
-@enduml
-```
+![](./CU-05.drawio.svg)
 
 ---
 
@@ -309,27 +202,7 @@ UC1 ..> UC7 : <<extend>>
 
 ### Diagrama local
 
-```plantuml
-@startuml
-left to right direction
-actor "Estudiante / Docente" as USR
-
-rectangle "CU-06: Reproducir Video" {
-  usecase "Reproducir video" as UC1
-  usecase "Verificar acceso al curso" as UC2
-  usecase "Cargar último checkpoint" as UC3
-  usecase "Registrar checkpoint" as UC4
-  usecase "Cambiar resolución de video" as UC5
-}
-
-USR --> UC1
-
-UC1 ..> UC2 : <<include>>
-UC1 ..> UC3 : <<include>>
-UC1 ..> UC4 : <<include>>
-UC1 ..> UC5 : <<extend>>
-@enduml
-```
+![](./CU-06.drawio.svg)
 
 ---
 
@@ -361,25 +234,7 @@ UC1 ..> UC5 : <<extend>>
 
 ### Diagrama local
 
-```plantuml
-@startuml
-left to right direction
-actor "Estudiante / Docente" as USR
-
-rectangle "CU-07: Registrar Checkpoint" {
-  usecase "Registrar checkpoint" as UC1
-  usecase "Guardar posición de reproducción" as UC2
-  usecase "Marcar video como completado" as UC3
-  usecase "Actualizar porcentaje de avance" as UC4
-}
-
-USR --> UC1
-
-UC1 ..> UC2 : <<include>>
-UC1 ..> UC4 : <<include>>
-UC1 ..> UC3 : <<extend>>
-@enduml
-```
+![](./CU-07.drawio.svg)
 
 ---
 
@@ -412,27 +267,7 @@ UC1 ..> UC3 : <<extend>>
 
 ### Diagrama local
 
-```plantuml
-@startuml
-left to right direction
-actor "Estudiante" as EST
-
-rectangle "CU-08: Calificar Clase" {
-  usecase "Calificar clase" as UC1
-  usecase "Verificar reproducción previa" as UC2
-  usecase "Registrar calificación" as UC3
-  usecase "Recalcular porcentaje de recomendación" as UC4
-  usecase "Agregar comentario/reseña" as UC5
-}
-
-EST --> UC1
-
-UC1 ..> UC2 : <<include>>
-UC1 ..> UC3 : <<include>>
-UC1 ..> UC4 : <<include>>
-UC1 ..> UC5 : <<extend>>
-@enduml
-```
+![](./CU-08.drawio.svg)
 
 ---
 
@@ -465,25 +300,7 @@ UC1 ..> UC5 : <<extend>>
 
 ### Diagrama local
 
-```plantuml
-@startuml
-left to right direction
-actor "Administrador" as ADMIN
-
-rectangle "CU-09: Inscribir Estudiante en Curso" {
-  usecase "Inscribir estudiante en curso" as UC1
-  usecase "Verificar rol de estudiante" as UC2
-  usecase "Registrar inscripción" as UC3
-  usecase "Notificar al estudiante" as UC4
-}
-
-ADMIN --> UC1
-
-UC1 ..> UC2 : <<include>>
-UC1 ..> UC3 : <<include>>
-UC1 ..> UC4 : <<extend>>
-@enduml
-```
+![](./CU-09.drawio.svg)
 
 ---
 
@@ -518,27 +335,7 @@ UC1 ..> UC4 : <<extend>>
 
 ### Diagrama local
 
-```plantuml
-@startuml
-left to right direction
-actor "Docente" as DOC
-
-rectangle "CU-10: Subir Grabación" {
-  usecase "Subir grabación" as UC1
-  usecase "Verificar cátedra del docente" as UC2
-  usecase "Validar formato de video" as UC3
-  usecase "Asociar grabación al curso" as UC4
-  usecase "Notificar a estudiantes inscritos" as UC5
-}
-
-DOC --> UC1
-
-UC1 ..> UC2 : <<include>>
-UC1 ..> UC3 : <<include>>
-UC1 ..> UC4 : <<include>>
-UC1 ..> UC5 : <<extend>>
-@enduml
-```
+![](./CU-10.drawio.svg)
 
 ---
 
@@ -571,27 +368,7 @@ UC1 ..> UC5 : <<extend>>
 
 ### Diagrama local
 
-```plantuml
-@startuml
-left to right direction
-actor "Administrador" as ADMIN
-
-rectangle "CU-11: Asignar Rol a Usuario" {
-  usecase "Asignar rol a usuario" as UC1
-  usecase "Gestionar usuarios" as UC2
-  usecase "Confirmar cambio de rol" as UC3
-  usecase "Registrar en auditoría" as UC4
-  usecase "Revocar rol" as UC5
-}
-
-ADMIN --> UC1
-
-UC1 ..> UC2 : <<include>>
-UC1 ..> UC3 : <<include>>
-UC1 ..> UC4 : <<include>>
-UC1 ..> UC5 : <<extend>>
-@enduml
-```
+![](./CU-11.drawio.svg)
 
 ---
 
@@ -621,22 +398,4 @@ UC1 ..> UC5 : <<extend>>
 
 ### Diagrama local
 
-```plantuml
-@startuml
-left to right direction
-actor "Estudiante" as EST
-
-rectangle "CU-12: Ver Mis Cursos Inscritos" {
-  usecase "Ver mis cursos inscritos" as UC1
-  usecase "Cargar avance por curso" as UC2
-  usecase "Ver grabaciones del curso" as UC3
-  usecase "Acceder al reproductor" as UC4
-}
-
-EST --> UC1
-
-UC1 ..> UC2 : <<include>>
-UC1 ..> UC3 : <<extend>>
-UC3 ..> UC4 : <<extend>>
-@enduml
-```
+![](./CU-12.drawio.svg)
