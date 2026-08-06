@@ -5,6 +5,9 @@
 // Archivo: Schema + Validadores + Índices + Triggers (Change Streams)
 // ============================================================
 
+// Seleccionar la base de datos correcta (requerido cuando se usa MONGO_INITDB_ROOT_USERNAME)
+db = db.getSiblingDB('yousac_reproduction_db');
+
 // ── COLECCIÓN: checkpoints ───────────────────────────────────
 db.createCollection("checkpoints", {
   validator: {

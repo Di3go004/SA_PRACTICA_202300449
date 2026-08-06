@@ -310,6 +310,7 @@ BEGIN
 END //
 DELIMITER ;
 
+DELIMITER //
 CREATE TRIGGER trg_after_video_metrics_update
 AFTER UPDATE ON video_metrics
 FOR EACH ROW
