@@ -45,16 +45,16 @@ API Gateway (Node/Express) ── único punto de entrada, valida JWT, CORS, coo
 
 | Requisito | Estado |
 |---|---|
-| Registro/login restringido a `@ingenieria.usac.edu.gt` / `@ing.usac.edu.gt` | ✅ Validado por regex en `auth.service.ts`, verificado con correos reales y personales (gmail rechazado con 400). |
-| JWT + Session Cookie `HttpOnly`+`Secure` | ✅ JWT firmado en auth-service; cookie seteada por el Gateway. |
-| Catálogo + reproductor con checkpoint | ✅ `catalog-service` (catálogo) + `reproduction-service` (checkpoint, ratings, sesiones de reproducción). |
-| BDs independientes con procedimientos/vistas/funciones/triggers | ✅ `DB/auth_db.sql`, `DB/catalog_db.sql`, `DB/analytics_mysql.sql` (Postgres/MySQL) + `DB/reproduction_mongodb.js` (validadores + índices, MongoDB). |
-| Backend poliglota (Go, TypeScript, Python) | ✅ reproduction-service (Go), auth/catalog-service (TypeScript/NestJS), analytics-service (Python/FastAPI). |
-| **Tráfico interno estrictamente gRPC (prohibido REST entre microservicios)** | ✅ Migrado completo — ver sección 1. Antes solo analytics↔reproduction era gRPC real; el Gateway proxyaba REST a los 4 servicios. |
-| Punto de entrada único (Gateway) | ✅ El cliente web solo conoce la URL del Gateway; los microservicios no exponen REST de negocio (solo `/health`). |
-| Código limpio (SOLID) | ✅ Ver matriz arriba. |
-| Prohibición de BaaS / ORMs abstractos | ✅ Sin Supabase/Firebase/Prisma. SQLAlchemy en analytics-service se usa mayormente como *query builder* con SQL crudo (`text(...)`) para invocar SPs/vistas/funciones explícitamente — con dos excepciones de `db.query(Modelo)` para lecturas simples, señaladas como punto de atención. |
-| Orquestación local con un solo comando | ✅ `docker-compose.local.yml` — `docker compose -f docker-compose.local.yml up -d --build`. |
+| Registro/login restringido a `@ingenieria.usac.edu.gt` / `@ing.usac.edu.gt` | Validado por regex en `auth.service.ts`, verificado con correos reales y personales (gmail rechazado con 400). |
+| JWT + Session Cookie `HttpOnly`+`Secure` | JWT firmado en auth-service; cookie seteada por el Gateway. |
+| Catálogo + reproductor con checkpoint | `catalog-service` (catálogo) + `reproduction-service` (checkpoint, ratings, sesiones de reproducción). |
+| BDs independientes con procedimientos/vistas/funciones/triggers | `DB/auth_db.sql`, `DB/catalog_db.sql`, `DB/analytics_mysql.sql` (Postgres/MySQL) + `DB/reproduction_mongodb.js` (validadores + índices, MongoDB). |
+| Backend poliglota (Go, TypeScript, Python) | reproduction-service (Go), auth/catalog-service (TypeScript/NestJS), analytics-service (Python/FastAPI). |
+| **Tráfico interno estrictamente gRPC (prohibido REST entre microservicios)** | Migrado completo — ver sección 1. Antes solo analytics↔reproduction era gRPC real; el Gateway proxyaba REST a los 4 servicios. |
+| Punto de entrada único (Gateway) | El cliente web solo conoce la URL del Gateway; los microservicios no exponen REST de negocio (solo `/health`). |
+| Código limpio (SOLID) | Ver matriz arriba. |
+| Prohibición de BaaS / ORMs abstractos | Sin Supabase/Firebase/Prisma. SQLAlchemy en analytics-service se usa mayormente como *query builder* con SQL crudo (`text(...)`) para invocar SPs/vistas/funciones explícitamente — con dos excepciones de `db.query(Modelo)` para lecturas simples, señaladas como punto de atención. |
+| Orquestación local con un solo comando | `docker-compose.local.yml` — `docker compose -f docker-compose.local.yml up -d --build`. |
 
 ---
 
