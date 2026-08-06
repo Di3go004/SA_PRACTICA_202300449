@@ -83,7 +83,13 @@ func (r *Repository) GetVideoStats(ctx context.Context, videoID int) (*VideoStat
 	}, nil
 }
 
-// Actualizar video_stats collection (cache de estadísticas)
+// Actualizar video_stats collection (cache de estadísticas).
+// El validador $jsonSchema de video_stats (reproduction_mongodb.js) exige
+// total_views/average_progress además de recommendation_percent — campos que
+// se derivan de checkpoints, no de calificaciones, y esta ruta de escritura
+// solo tiene datos de rating. Se inicializan en 0 vía $setOnInsert (no se
+// inventan datos) para satisfacer el esquema sin pisar un valor real que ya
+// haya sido calculado por otra vía.
 func (r *Repository) UpdateVideoStats(ctx context.Context, stats *VideoStats) error {
 	filter := bson.M{"video_id": stats.VideoID}
 	update := bson.M{
@@ -92,6 +98,10 @@ func (r *Repository) UpdateVideoStats(ctx context.Context, stats *VideoStats) er
 			"average_stars":          stats.AverageStars,
 			"recommendation_percent": stats.RecommendationPercent,
 			"last_updated":           time.Now(),
+		},
+		"$setOnInsert": bson.M{
+			"total_views":      0,
+			"average_progress": 0.0,
 		},
 	}
 	_, err := r.videoStats.UpdateOne(ctx, filter, update, options.Update().SetUpsert(true))

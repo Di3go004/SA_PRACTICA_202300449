@@ -2,8 +2,8 @@
 package ratings
 
 import (
-	"time"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"time"
 )
 
 type Rating struct {

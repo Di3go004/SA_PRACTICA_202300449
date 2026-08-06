@@ -5,6 +5,8 @@
 -- Dominio: Autenticación, Usuarios, Roles, Sesiones
 -- ============================================================
 
+\connect yousac_auth_db
+
 -- ── TABLAS ──────────────────────────────────────────────────
 
 CREATE TABLE roles (

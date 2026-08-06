@@ -22,6 +22,11 @@ func NewRepository(db *database.MongoClient) *Repository {
 
 func (r *Repository) CreateSession(ctx context.Context, session *PlaybackSession) (string, error) {
 	session.StartedAt = time.Now()
+	if session.Events == nil {
+		// Un slice nil serializa como BSON null; el validador $jsonSchema exige
+		// bsonType "array" para "events" cuando está presente. [] sí es válido.
+		session.Events = []PlaybackEvent{}
+	}
 	result, err := r.collection.InsertOne(ctx, session)
 	if err != nil {
 		return "", err

@@ -149,6 +149,74 @@ func (x *CheckpointResponse) GetCompleted() bool {
 	return false
 }
 
+type SaveCheckpointRequest struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	UserId          string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	VideoId         string                 `protobuf:"bytes,2,opt,name=video_id,json=videoId,proto3" json:"video_id,omitempty"`
+	PositionSeconds int32                  `protobuf:"varint,3,opt,name=position_seconds,json=positionSeconds,proto3" json:"position_seconds,omitempty"`
+	TotalSeconds    int32                  `protobuf:"varint,4,opt,name=total_seconds,json=totalSeconds,proto3" json:"total_seconds,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *SaveCheckpointRequest) Reset() {
+	*x = SaveCheckpointRequest{}
+	mi := &file_checkpoints_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SaveCheckpointRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SaveCheckpointRequest) ProtoMessage() {}
+
+func (x *SaveCheckpointRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_checkpoints_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SaveCheckpointRequest.ProtoReflect.Descriptor instead.
+func (*SaveCheckpointRequest) Descriptor() ([]byte, []int) {
+	return file_checkpoints_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *SaveCheckpointRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+func (x *SaveCheckpointRequest) GetVideoId() string {
+	if x != nil {
+		return x.VideoId
+	}
+	return ""
+}
+
+func (x *SaveCheckpointRequest) GetPositionSeconds() int32 {
+	if x != nil {
+		return x.PositionSeconds
+	}
+	return 0
+}
+
+func (x *SaveCheckpointRequest) GetTotalSeconds() int32 {
+	if x != nil {
+		return x.TotalSeconds
+	}
+	return 0
+}
+
 type VideoStatsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	VideoId       string                 `protobuf:"bytes,1,opt,name=video_id,json=videoId,proto3" json:"video_id,omitempty"`
@@ -158,7 +226,7 @@ type VideoStatsRequest struct {
 
 func (x *VideoStatsRequest) Reset() {
 	*x = VideoStatsRequest{}
-	mi := &file_checkpoints_proto_msgTypes[2]
+	mi := &file_checkpoints_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -170,7 +238,7 @@ func (x *VideoStatsRequest) String() string {
 func (*VideoStatsRequest) ProtoMessage() {}
 
 func (x *VideoStatsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_checkpoints_proto_msgTypes[2]
+	mi := &file_checkpoints_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -183,7 +251,7 @@ func (x *VideoStatsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VideoStatsRequest.ProtoReflect.Descriptor instead.
 func (*VideoStatsRequest) Descriptor() ([]byte, []int) {
-	return file_checkpoints_proto_rawDescGZIP(), []int{2}
+	return file_checkpoints_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *VideoStatsRequest) GetVideoId() string {
@@ -205,7 +273,7 @@ type VideoStatsResponse struct {
 
 func (x *VideoStatsResponse) Reset() {
 	*x = VideoStatsResponse{}
-	mi := &file_checkpoints_proto_msgTypes[3]
+	mi := &file_checkpoints_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -217,7 +285,7 @@ func (x *VideoStatsResponse) String() string {
 func (*VideoStatsResponse) ProtoMessage() {}
 
 func (x *VideoStatsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_checkpoints_proto_msgTypes[3]
+	mi := &file_checkpoints_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -230,7 +298,7 @@ func (x *VideoStatsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VideoStatsResponse.ProtoReflect.Descriptor instead.
 func (*VideoStatsResponse) Descriptor() ([]byte, []int) {
-	return file_checkpoints_proto_rawDescGZIP(), []int{3}
+	return file_checkpoints_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *VideoStatsResponse) GetVideoId() string {
@@ -261,17 +329,161 @@ func (x *VideoStatsResponse) GetRecommendationPercent() float32 {
 	return 0
 }
 
-type UserProgressRequest struct {
+type SaveRatingRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	CourseId      string                 `protobuf:"bytes,2,opt,name=course_id,json=courseId,proto3" json:"course_id,omitempty"`
+	VideoId       string                 `protobuf:"bytes,2,opt,name=video_id,json=videoId,proto3" json:"video_id,omitempty"`
+	Stars         int32                  `protobuf:"varint,3,opt,name=stars,proto3" json:"stars,omitempty"`
+	Comment       string                 `protobuf:"bytes,4,opt,name=comment,proto3" json:"comment,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SaveRatingRequest) Reset() {
+	*x = SaveRatingRequest{}
+	mi := &file_checkpoints_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SaveRatingRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SaveRatingRequest) ProtoMessage() {}
+
+func (x *SaveRatingRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_checkpoints_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SaveRatingRequest.ProtoReflect.Descriptor instead.
+func (*SaveRatingRequest) Descriptor() ([]byte, []int) {
+	return file_checkpoints_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *SaveRatingRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+func (x *SaveRatingRequest) GetVideoId() string {
+	if x != nil {
+		return x.VideoId
+	}
+	return ""
+}
+
+func (x *SaveRatingRequest) GetStars() int32 {
+	if x != nil {
+		return x.Stars
+	}
+	return 0
+}
+
+func (x *SaveRatingRequest) GetComment() string {
+	if x != nil {
+		return x.Comment
+	}
+	return ""
+}
+
+// Estadísticas reales de calificación (no confundir con VideoStatsResponse, que
+// analytics-service consume con un mapeo de campos propio ya establecido).
+type RatingStatsResponse struct {
+	state                 protoimpl.MessageState `protogen:"open.v1"`
+	VideoId               string                 `protobuf:"bytes,1,opt,name=video_id,json=videoId,proto3" json:"video_id,omitempty"`
+	TotalRatings          int32                  `protobuf:"varint,2,opt,name=total_ratings,json=totalRatings,proto3" json:"total_ratings,omitempty"`
+	AverageStars          float32                `protobuf:"fixed32,3,opt,name=average_stars,json=averageStars,proto3" json:"average_stars,omitempty"`
+	RecommendationPercent float32                `protobuf:"fixed32,4,opt,name=recommendation_percent,json=recommendationPercent,proto3" json:"recommendation_percent,omitempty"`
+	unknownFields         protoimpl.UnknownFields
+	sizeCache             protoimpl.SizeCache
+}
+
+func (x *RatingStatsResponse) Reset() {
+	*x = RatingStatsResponse{}
+	mi := &file_checkpoints_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RatingStatsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RatingStatsResponse) ProtoMessage() {}
+
+func (x *RatingStatsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_checkpoints_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RatingStatsResponse.ProtoReflect.Descriptor instead.
+func (*RatingStatsResponse) Descriptor() ([]byte, []int) {
+	return file_checkpoints_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *RatingStatsResponse) GetVideoId() string {
+	if x != nil {
+		return x.VideoId
+	}
+	return ""
+}
+
+func (x *RatingStatsResponse) GetTotalRatings() int32 {
+	if x != nil {
+		return x.TotalRatings
+	}
+	return 0
+}
+
+func (x *RatingStatsResponse) GetAverageStars() float32 {
+	if x != nil {
+		return x.AverageStars
+	}
+	return 0
+}
+
+func (x *RatingStatsResponse) GetRecommendationPercent() float32 {
+	if x != nil {
+		return x.RecommendationPercent
+	}
+	return 0
+}
+
+type UserProgressRequest struct {
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	UserId   string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	CourseId string                 `protobuf:"bytes,2,opt,name=course_id,json=courseId,proto3" json:"course_id,omitempty"`
+	// IDs de video del curso cuyo progreso se quiere agregar. reproduction-service
+	// no conoce la relación curso→video (vive en catalog_db/Postgres), así que quien
+	// llama debe resolverla antes. Si viene vacío, no hay forma de calcular progreso
+	// real y se responde con overall_progress=0 y videos=[] (comportamiento explícito,
+	// ya no un stub silencioso).
+	VideoIds      []string `protobuf:"bytes,3,rep,name=video_ids,json=videoIds,proto3" json:"video_ids,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *UserProgressRequest) Reset() {
 	*x = UserProgressRequest{}
-	mi := &file_checkpoints_proto_msgTypes[4]
+	mi := &file_checkpoints_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -283,7 +495,7 @@ func (x *UserProgressRequest) String() string {
 func (*UserProgressRequest) ProtoMessage() {}
 
 func (x *UserProgressRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_checkpoints_proto_msgTypes[4]
+	mi := &file_checkpoints_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -296,7 +508,7 @@ func (x *UserProgressRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UserProgressRequest.ProtoReflect.Descriptor instead.
 func (*UserProgressRequest) Descriptor() ([]byte, []int) {
-	return file_checkpoints_proto_rawDescGZIP(), []int{4}
+	return file_checkpoints_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *UserProgressRequest) GetUserId() string {
@@ -313,6 +525,13 @@ func (x *UserProgressRequest) GetCourseId() string {
 	return ""
 }
 
+func (x *UserProgressRequest) GetVideoIds() []string {
+	if x != nil {
+		return x.VideoIds
+	}
+	return nil
+}
+
 type UserProgressResponse struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
 	UserId          string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
@@ -325,7 +544,7 @@ type UserProgressResponse struct {
 
 func (x *UserProgressResponse) Reset() {
 	*x = UserProgressResponse{}
-	mi := &file_checkpoints_proto_msgTypes[5]
+	mi := &file_checkpoints_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -337,7 +556,7 @@ func (x *UserProgressResponse) String() string {
 func (*UserProgressResponse) ProtoMessage() {}
 
 func (x *UserProgressResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_checkpoints_proto_msgTypes[5]
+	mi := &file_checkpoints_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -350,7 +569,7 @@ func (x *UserProgressResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UserProgressResponse.ProtoReflect.Descriptor instead.
 func (*UserProgressResponse) Descriptor() ([]byte, []int) {
-	return file_checkpoints_proto_rawDescGZIP(), []int{5}
+	return file_checkpoints_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *UserProgressResponse) GetUserId() string {
@@ -392,7 +611,7 @@ type VideoProgress struct {
 
 func (x *VideoProgress) Reset() {
 	*x = VideoProgress{}
-	mi := &file_checkpoints_proto_msgTypes[6]
+	mi := &file_checkpoints_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -404,7 +623,7 @@ func (x *VideoProgress) String() string {
 func (*VideoProgress) ProtoMessage() {}
 
 func (x *VideoProgress) ProtoReflect() protoreflect.Message {
-	mi := &file_checkpoints_proto_msgTypes[6]
+	mi := &file_checkpoints_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -417,7 +636,7 @@ func (x *VideoProgress) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VideoProgress.ProtoReflect.Descriptor instead.
 func (*VideoProgress) Descriptor() ([]byte, []int) {
-	return file_checkpoints_proto_rawDescGZIP(), []int{6}
+	return file_checkpoints_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *VideoProgress) GetVideoId() string {
@@ -441,6 +660,230 @@ func (x *VideoProgress) GetCompleted() bool {
 	return false
 }
 
+type StartSessionRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	VideoId       string                 `protobuf:"bytes,2,opt,name=video_id,json=videoId,proto3" json:"video_id,omitempty"`
+	Resolution    string                 `protobuf:"bytes,3,opt,name=resolution,proto3" json:"resolution,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *StartSessionRequest) Reset() {
+	*x = StartSessionRequest{}
+	mi := &file_checkpoints_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *StartSessionRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StartSessionRequest) ProtoMessage() {}
+
+func (x *StartSessionRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_checkpoints_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StartSessionRequest.ProtoReflect.Descriptor instead.
+func (*StartSessionRequest) Descriptor() ([]byte, []int) {
+	return file_checkpoints_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *StartSessionRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+func (x *StartSessionRequest) GetVideoId() string {
+	if x != nil {
+		return x.VideoId
+	}
+	return ""
+}
+
+func (x *StartSessionRequest) GetResolution() string {
+	if x != nil {
+		return x.Resolution
+	}
+	return ""
+}
+
+type StartSessionResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
+	StartPosition int32                  `protobuf:"varint,2,opt,name=start_position,json=startPosition,proto3" json:"start_position,omitempty"`
+	Checkpoint    *CheckpointResponse    `protobuf:"bytes,3,opt,name=checkpoint,proto3" json:"checkpoint,omitempty"` // ausente (mensaje no seteado) si no había checkpoint previo
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *StartSessionResponse) Reset() {
+	*x = StartSessionResponse{}
+	mi := &file_checkpoints_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *StartSessionResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StartSessionResponse) ProtoMessage() {}
+
+func (x *StartSessionResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_checkpoints_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StartSessionResponse.ProtoReflect.Descriptor instead.
+func (*StartSessionResponse) Descriptor() ([]byte, []int) {
+	return file_checkpoints_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *StartSessionResponse) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
+func (x *StartSessionResponse) GetStartPosition() int32 {
+	if x != nil {
+		return x.StartPosition
+	}
+	return 0
+}
+
+func (x *StartSessionResponse) GetCheckpoint() *CheckpointResponse {
+	if x != nil {
+		return x.Checkpoint
+	}
+	return nil
+}
+
+type RecordEventRequest struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	SessionId       string                 `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
+	Type            string                 `protobuf:"bytes,2,opt,name=type,proto3" json:"type,omitempty"`
+	PositionSeconds int32                  `protobuf:"varint,3,opt,name=position_seconds,json=positionSeconds,proto3" json:"position_seconds,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *RecordEventRequest) Reset() {
+	*x = RecordEventRequest{}
+	mi := &file_checkpoints_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RecordEventRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RecordEventRequest) ProtoMessage() {}
+
+func (x *RecordEventRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_checkpoints_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RecordEventRequest.ProtoReflect.Descriptor instead.
+func (*RecordEventRequest) Descriptor() ([]byte, []int) {
+	return file_checkpoints_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *RecordEventRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
+func (x *RecordEventRequest) GetType() string {
+	if x != nil {
+		return x.Type
+	}
+	return ""
+}
+
+func (x *RecordEventRequest) GetPositionSeconds() int32 {
+	if x != nil {
+		return x.PositionSeconds
+	}
+	return 0
+}
+
+type Ack struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Ok            bool                   `protobuf:"varint,1,opt,name=ok,proto3" json:"ok,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Ack) Reset() {
+	*x = Ack{}
+	mi := &file_checkpoints_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Ack) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Ack) ProtoMessage() {}
+
+func (x *Ack) ProtoReflect() protoreflect.Message {
+	mi := &file_checkpoints_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Ack.ProtoReflect.Descriptor instead.
+func (*Ack) Descriptor() ([]byte, []int) {
+	return file_checkpoints_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *Ack) GetOk() bool {
+	if x != nil {
+		return x.Ok
+	}
+	return false
+}
+
 var File_checkpoints_proto protoreflect.FileDescriptor
 
 const file_checkpoints_proto_rawDesc = "" +
@@ -454,7 +897,12 @@ const file_checkpoints_proto_rawDesc = "" +
 	"\bvideo_id\x18\x02 \x01(\tR\avideoId\x12)\n" +
 	"\x10position_seconds\x18\x03 \x01(\x05R\x0fpositionSeconds\x12)\n" +
 	"\x10progress_percent\x18\x04 \x01(\x02R\x0fprogressPercent\x12\x1c\n" +
-	"\tcompleted\x18\x05 \x01(\bR\tcompleted\".\n" +
+	"\tcompleted\x18\x05 \x01(\bR\tcompleted\"\x9b\x01\n" +
+	"\x15SaveCheckpointRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x19\n" +
+	"\bvideo_id\x18\x02 \x01(\tR\avideoId\x12)\n" +
+	"\x10position_seconds\x18\x03 \x01(\x05R\x0fpositionSeconds\x12#\n" +
+	"\rtotal_seconds\x18\x04 \x01(\x05R\ftotalSeconds\".\n" +
 	"\x11VideoStatsRequest\x12\x19\n" +
 	"\bvideo_id\x18\x01 \x01(\tR\avideoId\"\xb2\x01\n" +
 	"\x12VideoStatsResponse\x12\x19\n" +
@@ -462,10 +910,21 @@ const file_checkpoints_proto_rawDesc = "" +
 	"\vtotal_views\x18\x02 \x01(\x05R\n" +
 	"totalViews\x12)\n" +
 	"\x10average_progress\x18\x03 \x01(\x02R\x0faverageProgress\x125\n" +
-	"\x16recommendation_percent\x18\x04 \x01(\x02R\x15recommendationPercent\"K\n" +
+	"\x16recommendation_percent\x18\x04 \x01(\x02R\x15recommendationPercent\"w\n" +
+	"\x11SaveRatingRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x19\n" +
+	"\bvideo_id\x18\x02 \x01(\tR\avideoId\x12\x14\n" +
+	"\x05stars\x18\x03 \x01(\x05R\x05stars\x12\x18\n" +
+	"\acomment\x18\x04 \x01(\tR\acomment\"\xb1\x01\n" +
+	"\x13RatingStatsResponse\x12\x19\n" +
+	"\bvideo_id\x18\x01 \x01(\tR\avideoId\x12#\n" +
+	"\rtotal_ratings\x18\x02 \x01(\x05R\ftotalRatings\x12#\n" +
+	"\raverage_stars\x18\x03 \x01(\x02R\faverageStars\x125\n" +
+	"\x16recommendation_percent\x18\x04 \x01(\x02R\x15recommendationPercent\"h\n" +
 	"\x13UserProgressRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x1b\n" +
-	"\tcourse_id\x18\x02 \x01(\tR\bcourseId\"\xac\x01\n" +
+	"\tcourse_id\x18\x02 \x01(\tR\bcourseId\x12\x1b\n" +
+	"\tvideo_ids\x18\x03 \x03(\tR\bvideoIds\"\xac\x01\n" +
 	"\x14UserProgressResponse\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x1b\n" +
 	"\tcourse_id\x18\x02 \x01(\tR\bcourseId\x12)\n" +
@@ -474,11 +933,37 @@ const file_checkpoints_proto_rawDesc = "" +
 	"\rVideoProgress\x12\x19\n" +
 	"\bvideo_id\x18\x01 \x01(\tR\avideoId\x12)\n" +
 	"\x10progress_percent\x18\x02 \x01(\x02R\x0fprogressPercent\x12\x1c\n" +
-	"\tcompleted\x18\x03 \x01(\bR\tcompleted2\x97\x02\n" +
+	"\tcompleted\x18\x03 \x01(\bR\tcompleted\"i\n" +
+	"\x13StartSessionRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x19\n" +
+	"\bvideo_id\x18\x02 \x01(\tR\avideoId\x12\x1e\n" +
+	"\n" +
+	"resolution\x18\x03 \x01(\tR\n" +
+	"resolution\"\x9e\x01\n" +
+	"\x14StartSessionResponse\x12\x1d\n" +
+	"\n" +
+	"session_id\x18\x01 \x01(\tR\tsessionId\x12%\n" +
+	"\x0estart_position\x18\x02 \x01(\x05R\rstartPosition\x12@\n" +
+	"\n" +
+	"checkpoint\x18\x03 \x01(\v2 .reproduccion.CheckpointResponseR\n" +
+	"checkpoint\"r\n" +
+	"\x12RecordEventRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18\x01 \x01(\tR\tsessionId\x12\x12\n" +
+	"\x04type\x18\x02 \x01(\tR\x04type\x12)\n" +
+	"\x10position_seconds\x18\x03 \x01(\x05R\x0fpositionSeconds\"\x15\n" +
+	"\x03Ack\x12\x0e\n" +
+	"\x02ok\x18\x01 \x01(\bR\x02ok2\xb3\x05\n" +
 	"\x13ReproduccionService\x12R\n" +
-	"\rGetCheckpoint\x12\x1f.reproduccion.CheckpointRequest\x1a .reproduccion.CheckpointResponse\x12R\n" +
-	"\rGetVideoStats\x12\x1f.reproduccion.VideoStatsRequest\x1a .reproduccion.VideoStatsResponse\x12X\n" +
-	"\x0fGetUserProgress\x12!.reproduccion.UserProgressRequest\x1a\".reproduccion.UserProgressResponseB\tZ\a./protob\x06proto3"
+	"\rGetCheckpoint\x12\x1f.reproduccion.CheckpointRequest\x1a .reproduccion.CheckpointResponse\x12W\n" +
+	"\x0eSaveCheckpoint\x12#.reproduccion.SaveCheckpointRequest\x1a .reproduccion.CheckpointResponse\x12R\n" +
+	"\rGetVideoStats\x12\x1f.reproduccion.VideoStatsRequest\x1a .reproduccion.VideoStatsResponse\x12P\n" +
+	"\n" +
+	"SaveRating\x12\x1f.reproduccion.SaveRatingRequest\x1a!.reproduccion.RatingStatsResponse\x12T\n" +
+	"\x0eGetRatingStats\x12\x1f.reproduccion.VideoStatsRequest\x1a!.reproduccion.RatingStatsResponse\x12X\n" +
+	"\x0fGetUserProgress\x12!.reproduccion.UserProgressRequest\x1a\".reproduccion.UserProgressResponse\x12U\n" +
+	"\fStartSession\x12!.reproduccion.StartSessionRequest\x1a\".reproduccion.StartSessionResponse\x12B\n" +
+	"\vRecordEvent\x12 .reproduccion.RecordEventRequest\x1a\x11.reproduccion.AckB\tZ\a./protob\x06proto3"
 
 var (
 	file_checkpoints_proto_rawDescOnce sync.Once
@@ -492,29 +977,47 @@ func file_checkpoints_proto_rawDescGZIP() []byte {
 	return file_checkpoints_proto_rawDescData
 }
 
-var file_checkpoints_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
+var file_checkpoints_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
 var file_checkpoints_proto_goTypes = []any{
-	(*CheckpointRequest)(nil),    // 0: reproduccion.CheckpointRequest
-	(*CheckpointResponse)(nil),   // 1: reproduccion.CheckpointResponse
-	(*VideoStatsRequest)(nil),    // 2: reproduccion.VideoStatsRequest
-	(*VideoStatsResponse)(nil),   // 3: reproduccion.VideoStatsResponse
-	(*UserProgressRequest)(nil),  // 4: reproduccion.UserProgressRequest
-	(*UserProgressResponse)(nil), // 5: reproduccion.UserProgressResponse
-	(*VideoProgress)(nil),        // 6: reproduccion.VideoProgress
+	(*CheckpointRequest)(nil),     // 0: reproduccion.CheckpointRequest
+	(*CheckpointResponse)(nil),    // 1: reproduccion.CheckpointResponse
+	(*SaveCheckpointRequest)(nil), // 2: reproduccion.SaveCheckpointRequest
+	(*VideoStatsRequest)(nil),     // 3: reproduccion.VideoStatsRequest
+	(*VideoStatsResponse)(nil),    // 4: reproduccion.VideoStatsResponse
+	(*SaveRatingRequest)(nil),     // 5: reproduccion.SaveRatingRequest
+	(*RatingStatsResponse)(nil),   // 6: reproduccion.RatingStatsResponse
+	(*UserProgressRequest)(nil),   // 7: reproduccion.UserProgressRequest
+	(*UserProgressResponse)(nil),  // 8: reproduccion.UserProgressResponse
+	(*VideoProgress)(nil),         // 9: reproduccion.VideoProgress
+	(*StartSessionRequest)(nil),   // 10: reproduccion.StartSessionRequest
+	(*StartSessionResponse)(nil),  // 11: reproduccion.StartSessionResponse
+	(*RecordEventRequest)(nil),    // 12: reproduccion.RecordEventRequest
+	(*Ack)(nil),                   // 13: reproduccion.Ack
 }
 var file_checkpoints_proto_depIdxs = []int32{
-	6, // 0: reproduccion.UserProgressResponse.videos:type_name -> reproduccion.VideoProgress
-	0, // 1: reproduccion.ReproduccionService.GetCheckpoint:input_type -> reproduccion.CheckpointRequest
-	2, // 2: reproduccion.ReproduccionService.GetVideoStats:input_type -> reproduccion.VideoStatsRequest
-	4, // 3: reproduccion.ReproduccionService.GetUserProgress:input_type -> reproduccion.UserProgressRequest
-	1, // 4: reproduccion.ReproduccionService.GetCheckpoint:output_type -> reproduccion.CheckpointResponse
-	3, // 5: reproduccion.ReproduccionService.GetVideoStats:output_type -> reproduccion.VideoStatsResponse
-	5, // 6: reproduccion.ReproduccionService.GetUserProgress:output_type -> reproduccion.UserProgressResponse
-	4, // [4:7] is the sub-list for method output_type
-	1, // [1:4] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	9,  // 0: reproduccion.UserProgressResponse.videos:type_name -> reproduccion.VideoProgress
+	1,  // 1: reproduccion.StartSessionResponse.checkpoint:type_name -> reproduccion.CheckpointResponse
+	0,  // 2: reproduccion.ReproduccionService.GetCheckpoint:input_type -> reproduccion.CheckpointRequest
+	2,  // 3: reproduccion.ReproduccionService.SaveCheckpoint:input_type -> reproduccion.SaveCheckpointRequest
+	3,  // 4: reproduccion.ReproduccionService.GetVideoStats:input_type -> reproduccion.VideoStatsRequest
+	5,  // 5: reproduccion.ReproduccionService.SaveRating:input_type -> reproduccion.SaveRatingRequest
+	3,  // 6: reproduccion.ReproduccionService.GetRatingStats:input_type -> reproduccion.VideoStatsRequest
+	7,  // 7: reproduccion.ReproduccionService.GetUserProgress:input_type -> reproduccion.UserProgressRequest
+	10, // 8: reproduccion.ReproduccionService.StartSession:input_type -> reproduccion.StartSessionRequest
+	12, // 9: reproduccion.ReproduccionService.RecordEvent:input_type -> reproduccion.RecordEventRequest
+	1,  // 10: reproduccion.ReproduccionService.GetCheckpoint:output_type -> reproduccion.CheckpointResponse
+	1,  // 11: reproduccion.ReproduccionService.SaveCheckpoint:output_type -> reproduccion.CheckpointResponse
+	4,  // 12: reproduccion.ReproduccionService.GetVideoStats:output_type -> reproduccion.VideoStatsResponse
+	6,  // 13: reproduccion.ReproduccionService.SaveRating:output_type -> reproduccion.RatingStatsResponse
+	6,  // 14: reproduccion.ReproduccionService.GetRatingStats:output_type -> reproduccion.RatingStatsResponse
+	8,  // 15: reproduccion.ReproduccionService.GetUserProgress:output_type -> reproduccion.UserProgressResponse
+	11, // 16: reproduccion.ReproduccionService.StartSession:output_type -> reproduccion.StartSessionResponse
+	13, // 17: reproduccion.ReproduccionService.RecordEvent:output_type -> reproduccion.Ack
+	10, // [10:18] is the sub-list for method output_type
+	2,  // [2:10] is the sub-list for method input_type
+	2,  // [2:2] is the sub-list for extension type_name
+	2,  // [2:2] is the sub-list for extension extendee
+	0,  // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_checkpoints_proto_init() }
@@ -528,7 +1031,7 @@ func file_checkpoints_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_checkpoints_proto_rawDesc), len(file_checkpoints_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   7,
+			NumMessages:   14,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

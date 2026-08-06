@@ -1,16 +1,19 @@
 # app/main.py
+# La lógica de negocio (métricas, reportes) se sirve exclusivamente por gRPC
+# (app.grpc.server.AnalyticsServicer) — FastAPI queda solo para /health, consumido
+# por el healthcheck de docker-compose, que no es tráfico de negocio entre servicios.
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.metrics.router import router as metrics_router
-from app.reports.router import router as reports_router
 from app.scheduler.tasks import start_scheduler
+from app.grpc.server import serve as start_grpc_server
+import threading
 import uvicorn
 import os
 
 app = FastAPI(
     title="YoUSAC Analytics Service",
-    description="Microservicio de Analítica - Métricas y Reportes",
-    version="1.0.0"
+    description="Microservicio de Analítica (gRPC: métricas y reportes; HTTP: solo /health)",
+    version="2.0.0"
 )
 
 app.add_middleware(
@@ -20,9 +23,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-app.include_router(metrics_router, prefix="/api/analytics/metrics", tags=["Metrics"])
-app.include_router(reports_router, prefix="/api/analytics/reports", tags=["Reports"])
 
 @app.get("/health")
 def health():
@@ -38,6 +38,22 @@ async def startup_event():
     except Exception as e:
         print(f"⚠️  MySQL no disponible al arrancar: {e}")
         print("   El servicio continuará sin BD hasta que esté disponible")
+
+    grpc_port = os.getenv("GRPC_PORT", "50054")
+
+    def _run_grpc_server():
+        # Un daemon thread que lanza una excepción no tumba el proceso ni se ve en
+        # los logs por defecto — la capturamos explícitamente para que un fallo acá
+        # sea visible en vez de dejar el puerto gRPC silenciosamente cerrado.
+        try:
+            server = start_grpc_server(grpc_port)
+            server.wait_for_termination()
+        except Exception:
+            import traceback
+            print(f"❌ Error iniciando gRPC server en puerto {grpc_port}:")
+            traceback.print_exc()
+
+    threading.Thread(target=_run_grpc_server, daemon=True).start()
 
     try:
         start_scheduler()

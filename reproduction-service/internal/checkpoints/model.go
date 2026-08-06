@@ -2,8 +2,8 @@
 package checkpoints
 
 import (
-	"time"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"time"
 )
 
 // Modelo principal de checkpoint
@@ -20,8 +20,8 @@ type Checkpoint struct {
 
 // DTO para guardar/actualizar checkpoint
 type SaveCheckpointDTO struct {
-	UserID          int     `json:"user_id"          binding:"required"`
-	VideoID         int     `json:"video_id"         binding:"required"`
-	PositionSeconds int     `json:"position_seconds" binding:"required"`
-	TotalSeconds    int     `json:"total_seconds"    binding:"required"`
+	UserID          int `json:"user_id"          binding:"required"`
+	VideoID         int `json:"video_id"         binding:"required"`
+	PositionSeconds int `json:"position_seconds" binding:"required"`
+	TotalSeconds    int `json:"total_seconds"    binding:"required"`
 }

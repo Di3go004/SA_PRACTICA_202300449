@@ -9,10 +9,10 @@ import (
 	"os"
 
 	"reproduction-service/internal/checkpoints"
+	"reproduction-service/internal/database"
 	grpcserver "reproduction-service/internal/grpc/server"
 	"reproduction-service/internal/ratings"
 	"reproduction-service/internal/streaming"
-	"reproduction-service/internal/database"
 
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
@@ -29,13 +29,13 @@ func main() {
 
 	// Inicializar repositorios
 	checkpointRepo := checkpoints.NewRepository(db)
-	ratingRepo     := ratings.NewRepository(db)
-	streamingRepo  := streaming.NewRepository(db)
+	ratingRepo := ratings.NewRepository(db)
+	streamingRepo := streaming.NewRepository(db)
 
 	// Inicializar servicios
 	checkpointSvc := checkpoints.NewService(checkpointRepo)
-	ratingSvc     := ratings.NewService(ratingRepo, checkpointRepo)
-	streamingSvc  := streaming.NewService(streamingRepo, checkpointRepo)
+	ratingSvc := ratings.NewService(ratingRepo, checkpointRepo)
+	streamingSvc := streaming.NewService(streamingRepo, checkpointRepo)
 
 	// ── Servidor gRPC ────────────────────────────────────────
 	grpcPort := os.Getenv("GRPC_PORT")
@@ -49,32 +49,28 @@ func main() {
 			log.Fatalf("Error iniciando gRPC listener: %v", err)
 		}
 		grpcServer := grpc.NewServer()
-		grpcserver.Register(grpcServer, checkpointSvc, ratingSvc)
+		grpcserver.Register(grpcServer, checkpointSvc, ratingSvc, streamingSvc)
 		fmt.Printf("gRPC server corriendo en puerto %s\n", grpcPort)
 		if err := grpcServer.Serve(lis); err != nil {
 			log.Fatalf("Error en gRPC server: %v", err)
 		}
 	}()
 
-	// ── Servidor HTTP (Gin) ──────────────────────────────────
+	// ── Servidor HTTP (solo /health) ──────────────────────────
+	// Toda la comunicación de negocio (checkpoints, ratings, sesiones de reproducción)
+	// migró a gRPC. El único endpoint HTTP que sobrevive es /health, consumido por el
+	// healthcheck de docker-compose — no es tráfico "entre microservicios" de negocio.
 	httpPort := os.Getenv("HTTP_PORT")
 	if httpPort == "" {
 		httpPort = "3001"
 	}
 
 	r := gin.Default()
-
-	// Health check (RNF-017)
 	r.GET("/health", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"status": "ok", "service": "reproduction"})
 	})
 
-	// Registrar rutas HTTP
-	checkpoints.RegisterRoutes(r, checkpointSvc)
-	ratings.RegisterRoutes(r, ratingSvc)
-	streaming.RegisterRoutes(r, streamingSvc)
-
-	fmt.Printf("HTTP server corriendo en puerto %s\n", httpPort)
+	fmt.Printf("HTTP server (solo /health) corriendo en puerto %s\n", httpPort)
 	if err := r.Run(":" + httpPort); err != nil {
 		log.Fatalf("Error iniciando HTTP server: %v", err)
 	}
