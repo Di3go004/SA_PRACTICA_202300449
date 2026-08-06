@@ -1,4 +1,4 @@
-
+// src/catalog/catalog.controller.ts
 import { Controller, Get, Query, Param, UseGuards, Req } from '@nestjs/common';
 import { CatalogService } from './catalog.service';
 import { JwtAuthGuard } from '../middleware/jwt.guard';

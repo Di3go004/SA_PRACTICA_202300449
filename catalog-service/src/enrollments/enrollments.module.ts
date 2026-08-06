@@ -1,8 +1,8 @@
-
+// src/enrollments/enrollments.module.ts
 import { Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
 import { EnrollmentsController } from './enrollments.controller';
 import { EnrollmentsService } from './enrollments.service';
-import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [

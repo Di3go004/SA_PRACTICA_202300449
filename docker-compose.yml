@@ -23,9 +23,9 @@ services:
       POSTGRES_DB: postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./auth-catalog-service/database/init_postgres.sql:/docker-entrypoint-initdb.d/00_init.sql
-      - ./auth-catalog-service/database/auth_db.sql:/docker-entrypoint-initdb.d/01_auth.sql
-      - ./auth-catalog-service/database/catalog_db.sql:/docker-entrypoint-initdb.d/02_catalog.sql
+      - ./DB/init_postgres.sql:/docker-entrypoint-initdb.d/00_init.sql
+      - ./DB/auth_db.sql:/docker-entrypoint-initdb.d/01_auth.sql
+      - ./DB/catalog_db.sql:/docker-entrypoint-initdb.d/02_catalog.sql
     ports:
       - "5432:5432"
     networks:
@@ -46,7 +46,7 @@ services:
       MONGO_INITDB_DATABASE: yousac_reproduction_db
     volumes:
       - mongodb_data:/data/db
-      - ./reproduction-service/database/reproduction_mongodb.js:/docker-entrypoint-initdb.d/init.js
+      - ./DB/reproduction_mongodb.js:/docker-entrypoint-initdb.d/init.js
     ports:
       - "27017:27017"
     networks:
@@ -68,7 +68,7 @@ services:
       MYSQL_PASSWORD: yousac_secret
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./analytics-service/database/analytics_mysql.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./DB/analytics_mysql.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "3306:3306"
     networks:
@@ -81,29 +81,20 @@ services:
 
   # ── MICROSERVICIOS ───────────────────────────────────────────
 
-  auth-catalog-service:
+  auth-service:
     build:
-      context: ./auth-catalog-service
+      context: ./auth-service
       dockerfile: Dockerfile
-    container_name: yousac_auth_catalog
+    container_name: yousac_auth
     restart: unless-stopped
     environment:
-      # Auth DB
       AUTH_DB_HOST: postgres-db
       AUTH_DB_PORT: 5432
       AUTH_DB_NAME: yousac_auth_db
       AUTH_DB_USER: yousac
       AUTH_DB_PASS: yousac_secret
-      # Catalog DB
-      CATALOG_DB_HOST: postgres-db
-      CATALOG_DB_PORT: 5432
-      CATALOG_DB_NAME: yousac_catalog_db
-      CATALOG_DB_USER: yousac
-      CATALOG_DB_PASS: yousac_secret
-      # JWT
       JWT_SECRET: supersecreto_yousac_2026
       JWT_TTL: 8h
-      # App
       PORT: 3000
       NODE_ENV: development
     ports:
@@ -115,6 +106,34 @@ services:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  catalog-service:
+    build:
+      context: ./catalog-service
+      dockerfile: Dockerfile
+    container_name: yousac_catalog
+    restart: unless-stopped
+    environment:
+      CATALOG_DB_HOST: postgres-db
+      CATALOG_DB_PORT: 5432
+      CATALOG_DB_NAME: yousac_catalog_db
+      CATALOG_DB_USER: yousac
+      CATALOG_DB_PASS: yousac_secret
+      JWT_SECRET: supersecreto_yousac_2026
+      PORT: 3003
+      NODE_ENV: development
+    ports:
+      - "3003:3003"
+    networks:
+      - yousac-network
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3003/health"]
       interval: 15s
       timeout: 5s
       retries: 3
@@ -156,7 +175,6 @@ services:
       MYSQL_DB: yousac_analytics_db
       MYSQL_USER: yousac
       MYSQL_PASSWORD: yousac_secret
-      # Cliente gRPC apuntando al servicio de reproducción
       GRPC_REPRODUCTION_HOST: reproduction-service
       GRPC_REPRODUCTION_PORT: 50051
       HTTP_PORT: 3002
@@ -185,7 +203,8 @@ services:
     container_name: yousac_gateway
     restart: unless-stopped
     environment:
-      AUTH_SERVICE_URL: http://auth-catalog-service:3000
+      AUTH_SERVICE_URL: http://auth-service:3000
+      CATALOG_SERVICE_URL: http://catalog-service:3003
       REPRODUCTION_SERVICE_URL: http://reproduction-service:3001
       ANALYTICS_SERVICE_URL: http://analytics-service:3002
       JWT_SECRET: supersecreto_yousac_2026
@@ -195,7 +214,9 @@ services:
     networks:
       - yousac-network
     depends_on:
-      auth-catalog-service:
+      auth-service:
+        condition: service_healthy
+      catalog-service:
         condition: service_healthy
       reproduction-service:
         condition: service_healthy

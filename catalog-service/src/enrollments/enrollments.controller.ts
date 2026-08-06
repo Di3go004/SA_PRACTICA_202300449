@@ -1,4 +1,4 @@
-
+// src/enrollments/enrollments.controller.ts
 import { Controller, Post, Delete, Get, Body, Param, UseGuards, Req } from '@nestjs/common';
 import { EnrollmentsService } from './enrollments.service';
 import { JwtAuthGuard } from '../middleware/jwt.guard';

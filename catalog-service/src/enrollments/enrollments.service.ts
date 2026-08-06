@@ -1,18 +1,15 @@
-
+// src/enrollments/enrollments.service.ts
 import { Injectable, BadRequestException } from '@nestjs/common';
-import { AuthDatabaseService } from '../common/database.service';
+import { CatalogDatabaseService } from '../common/database.service';
 
 @Injectable()
 export class EnrollmentsService {
-  constructor(private readonly db: AuthDatabaseService) {}
+  constructor(private readonly db: CatalogDatabaseService) {}
 
   async enrollStudent(studentId: number, courseId: number, adminId: number) {
     try {
-      // Usamos el SP sp_enroll_student de catalog_db.sql 
-      await this.db.catalogQuery('CALL sp_enroll_student($1, $2, $3)', [
-        studentId,
-        courseId,
-        adminId,
+      await this.db.query('CALL sp_enroll_student($1, $2, $3)', [
+        studentId, courseId, adminId,
       ]);
       return { message: 'Estudiante inscrito exitosamente' };
     } catch (error: any) {
@@ -21,16 +18,12 @@ export class EnrollmentsService {
   }
 
   async unenrollStudent(studentId: number, courseId: number) {
-    await this.db.catalogQuery('CALL sp_unenroll_student($1, $2)', [
-      studentId,
-      courseId,
-    ]);
+    await this.db.query('CALL sp_unenroll_student($1, $2)', [studentId, courseId]);
     return { message: 'Inscripción eliminada exitosamente' };
   }
 
   async getStudentCourses(studentId: number) {
-    // Usamos la función fn_get_student_courses de catalog_db.sql
-    const result = await this.db.catalogQuery(
+    const result = await this.db.query(
       'SELECT * FROM fn_get_student_courses($1)',
       [studentId],
     );
