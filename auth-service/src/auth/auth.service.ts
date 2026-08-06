@@ -24,13 +24,25 @@ export class AuthService {
       );
     }
 
-    const passwordHash = await bcrypt.hash(password, 12); // bcrypt factor 12
+    const passwordHash = await bcrypt.hash(password, 12);
 
-    await this.db.authQuery('CALL sp_register_user($1, $2, $3)', [
-      email,
-      passwordHash,
-      fullName,
-    ]);
+    try {
+      await this.db.authQuery('CALL sp_register_user($1, $2, $3)', [
+        email,
+        passwordHash,
+        fullName,
+      ]);
+    } catch (err: any) {
+      // Los RAISE EXCEPTION del SP llegan como errores de PostgreSQL
+      const msg = err?.message || '';
+      if (msg.includes('ya está registrado')) {
+        throw new BadRequestException('Este correo ya tiene una cuenta registrada');
+      }
+      if (msg.includes('no institucional')) {
+        throw new BadRequestException('Solo se permiten correos institucionales');
+      }
+      throw new BadRequestException(msg || 'Error al registrar usuario');
+    }
 
     return { message: 'Usuario registrado exitosamente' };
   }

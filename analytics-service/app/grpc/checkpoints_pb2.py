@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x11\x63heckpoints.proto\x12\x0creproduccion\"6\n\x11\x43heckpointRequest\x12\x0f\n\x07user_id\x18\x01 \x01(\t\x12\x10\n\x08video_id\x18\x02 \x01(\t\"~\n\x12\x43heckpointResponse\x12\x0f\n\x07user_id\x18\x01 \x01(\t\x12\x10\n\x08video_id\x18\x02 \x01(\t\x12\x18\n\x10position_seconds\x18\x03 \x01(\x05\x12\x18\n\x10progress_percent\x18\x04 \x01(\x02\x12\x11\n\tcompleted\x18\x05 \x01(\x08\"%\n\x11VideoStatsRequest\x12\x10\n\x08video_id\x18\x01 \x01(\t\"u\n\x12VideoStatsResponse\x12\x10\n\x08video_id\x18\x01 \x01(\t\x12\x13\n\x0btotal_views\x18\x02 \x01(\x05\x12\x18\n\x10\x61verage_progress\x18\x03 \x01(\x02\x12\x1e\n\x16recommendation_percent\x18\x04 \x01(\x02\"9\n\x13UserProgressRequest\x12\x0f\n\x07user_id\x18\x01 \x01(\t\x12\x11\n\tcourse_id\x18\x02 \x01(\t\"\x81\x01\n\x14UserProgressResponse\x12\x0f\n\x07user_id\x18\x01 \x01(\t\x12\x11\n\tcourse_id\x18\x02 \x01(\t\x12\x18\n\x10overall_progress\x18\x03 \x01(\x02\x12+\n\x06videos\x18\x04 \x03(\x0b\x32\x1b.reproduccion.VideoProgress\"N\n\rVideoProgress\x12\x10\n\x08video_id\x18\x01 \x01(\t\x12\x18\n\x10progress_percent\x18\x02 \x01(\x02\x12\x11\n\tcompleted\x18\x03 \x01(\x08\x32\x97\x02\n\x13ReproduccionService\x12R\n\rGetCheckpoint\x12\x1f.reproduccion.CheckpointRequest\x1a .reproduccion.CheckpointResponse\x12R\n\rGetVideoStats\x12\x1f.reproduccion.VideoStatsRequest\x1a .reproduccion.VideoStatsResponse\x12X\n\x0fGetUserProgress\x12!.reproduccion.UserProgressRequest\x1a\".reproduccion.UserProgressResponseB\tZ\x07./protob\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x11\x63heckpoints.proto\x12\x0creproduccion\"6\n\x11\x43heckpointRequest\x12\x0f\n\x07user_id\x18\x01 \x01(\t\x12\x10\n\x08video_id\x18\x02 \x01(\t\"~\n\x12\x43heckpointResponse\x12\x0f\n\x07user_id\x18\x01 \x01(\t\x12\x10\n\x08video_id\x18\x02 \x01(\t\x12\x18\n\x10position_seconds\x18\x03 \x01(\x05\x12\x18\n\x10progress_percent\x18\x04 \x01(\x02\x12\x11\n\tcompleted\x18\x05 \x01(\x08\"k\n\x15SaveCheckpointRequest\x12\x0f\n\x07user_id\x18\x01 \x01(\t\x12\x10\n\x08video_id\x18\x02 \x01(\t\x12\x18\n\x10position_seconds\x18\x03 \x01(\x05\x12\x15\n\rtotal_seconds\x18\x04 \x01(\x05\"%\n\x11VideoStatsRequest\x12\x10\n\x08video_id\x18\x01 \x01(\t\"u\n\x12VideoStatsResponse\x12\x10\n\x08video_id\x18\x01 \x01(\t\x12\x13\n\x0btotal_views\x18\x02 \x01(\x05\x12\x18\n\x10\x61verage_progress\x18\x03 \x01(\x02\x12\x1e\n\x16recommendation_percent\x18\x04 \x01(\x02\"V\n\x11SaveRatingRequest\x12\x0f\n\x07user_id\x18\x01 \x01(\t\x12\x10\n\x08video_id\x18\x02 \x01(\t\x12\r\n\x05stars\x18\x03 \x01(\x05\x12\x0f\n\x07\x63omment\x18\x04 \x01(\t\"u\n\x13RatingStatsResponse\x12\x10\n\x08video_id\x18\x01 \x01(\t\x12\x15\n\rtotal_ratings\x18\x02 \x01(\x05\x12\x15\n\raverage_stars\x18\x03 \x01(\x02\x12\x1e\n\x16recommendation_percent\x18\x04 \x01(\x02\"L\n\x13UserProgressRequest\x12\x0f\n\x07user_id\x18\x01 \x01(\t\x12\x11\n\tcourse_id\x18\x02 \x01(\t\x12\x11\n\tvideo_ids\x18\x03 \x03(\t\"\x81\x01\n\x14UserProgressResponse\x12\x0f\n\x07user_id\x18\x01 \x01(\t\x12\x11\n\tcourse_id\x18\x02 \x01(\t\x12\x18\n\x10overall_progress\x18\x03 \x01(\x02\x12+\n\x06videos\x18\x04 \x03(\x0b\x32\x1b.reproduccion.VideoProgress\"N\n\rVideoProgress\x12\x10\n\x08video_id\x18\x01 \x01(\t\x12\x18\n\x10progress_percent\x18\x02 \x01(\x02\x12\x11\n\tcompleted\x18\x03 \x01(\x08\"L\n\x13StartSessionRequest\x12\x0f\n\x07user_id\x18\x01 \x01(\t\x12\x10\n\x08video_id\x18\x02 \x01(\t\x12\x12\n\nresolution\x18\x03 \x01(\t\"x\n\x14StartSessionResponse\x12\x12\n\nsession_id\x18\x01 \x01(\t\x12\x16\n\x0estart_position\x18\x02 \x01(\x05\x12\x34\n\ncheckpoint\x18\x03 \x01(\x0b\x32 .reproduccion.CheckpointResponse\"P\n\x12RecordEventRequest\x12\x12\n\nsession_id\x18\x01 \x01(\t\x12\x0c\n\x04type\x18\x02 \x01(\t\x12\x18\n\x10position_seconds\x18\x03 \x01(\x05\"\x11\n\x03\x41\x63k\x12\n\n\x02ok\x18\x01 \x01(\x08\x32\xb3\x05\n\x13ReproduccionService\x12R\n\rGetCheckpoint\x12\x1f.reproduccion.CheckpointRequest\x1a .reproduccion.CheckpointResponse\x12W\n\x0eSaveCheckpoint\x12#.reproduccion.SaveCheckpointRequest\x1a .reproduccion.CheckpointResponse\x12R\n\rGetVideoStats\x12\x1f.reproduccion.VideoStatsRequest\x1a .reproduccion.VideoStatsResponse\x12P\n\nSaveRating\x12\x1f.reproduccion.SaveRatingRequest\x1a!.reproduccion.RatingStatsResponse\x12T\n\x0eGetRatingStats\x12\x1f.reproduccion.VideoStatsRequest\x1a!.reproduccion.RatingStatsResponse\x12X\n\x0fGetUserProgress\x12!.reproduccion.UserProgressRequest\x1a\".reproduccion.UserProgressResponse\x12U\n\x0cStartSession\x12!.reproduccion.StartSessionRequest\x1a\".reproduccion.StartSessionResponse\x12\x42\n\x0bRecordEvent\x12 .reproduccion.RecordEventRequest\x1a\x11.reproduccion.AckB\tZ\x07./protob\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -36,16 +36,30 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_CHECKPOINTREQUEST']._serialized_end=89
   _globals['_CHECKPOINTRESPONSE']._serialized_start=91
   _globals['_CHECKPOINTRESPONSE']._serialized_end=217
-  _globals['_VIDEOSTATSREQUEST']._serialized_start=219
-  _globals['_VIDEOSTATSREQUEST']._serialized_end=256
-  _globals['_VIDEOSTATSRESPONSE']._serialized_start=258
-  _globals['_VIDEOSTATSRESPONSE']._serialized_end=375
-  _globals['_USERPROGRESSREQUEST']._serialized_start=377
-  _globals['_USERPROGRESSREQUEST']._serialized_end=434
-  _globals['_USERPROGRESSRESPONSE']._serialized_start=437
-  _globals['_USERPROGRESSRESPONSE']._serialized_end=566
-  _globals['_VIDEOPROGRESS']._serialized_start=568
-  _globals['_VIDEOPROGRESS']._serialized_end=646
-  _globals['_REPRODUCCIONSERVICE']._serialized_start=649
-  _globals['_REPRODUCCIONSERVICE']._serialized_end=928
+  _globals['_SAVECHECKPOINTREQUEST']._serialized_start=219
+  _globals['_SAVECHECKPOINTREQUEST']._serialized_end=326
+  _globals['_VIDEOSTATSREQUEST']._serialized_start=328
+  _globals['_VIDEOSTATSREQUEST']._serialized_end=365
+  _globals['_VIDEOSTATSRESPONSE']._serialized_start=367
+  _globals['_VIDEOSTATSRESPONSE']._serialized_end=484
+  _globals['_SAVERATINGREQUEST']._serialized_start=486
+  _globals['_SAVERATINGREQUEST']._serialized_end=572
+  _globals['_RATINGSTATSRESPONSE']._serialized_start=574
+  _globals['_RATINGSTATSRESPONSE']._serialized_end=691
+  _globals['_USERPROGRESSREQUEST']._serialized_start=693
+  _globals['_USERPROGRESSREQUEST']._serialized_end=769
+  _globals['_USERPROGRESSRESPONSE']._serialized_start=772
+  _globals['_USERPROGRESSRESPONSE']._serialized_end=901
+  _globals['_VIDEOPROGRESS']._serialized_start=903
+  _globals['_VIDEOPROGRESS']._serialized_end=981
+  _globals['_STARTSESSIONREQUEST']._serialized_start=983
+  _globals['_STARTSESSIONREQUEST']._serialized_end=1059
+  _globals['_STARTSESSIONRESPONSE']._serialized_start=1061
+  _globals['_STARTSESSIONRESPONSE']._serialized_end=1181
+  _globals['_RECORDEVENTREQUEST']._serialized_start=1183
+  _globals['_RECORDEVENTREQUEST']._serialized_end=1263
+  _globals['_ACK']._serialized_start=1265
+  _globals['_ACK']._serialized_end=1282
+  _globals['_REPRODUCCIONSERVICE']._serialized_start=1285
+  _globals['_REPRODUCCIONSERVICE']._serialized_end=1976
 # @@protoc_insertion_point(module_scope)

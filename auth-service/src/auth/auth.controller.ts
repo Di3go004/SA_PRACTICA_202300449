@@ -1,42 +1,30 @@
-import { Controller, Post, Body, Res, Req, HttpCode } from '@nestjs/common';
+import { Controller, UseFilters } from '@nestjs/common';
+import { GrpcMethod } from '@nestjs/microservices';
 import { AuthService } from './auth.service';
-import { Response, Request } from 'express';
+import { GrpcExceptionFilter } from '../middleware/grpc-exception.filter';
 
-@Controller('auth')
+// Register/Login/Logout son públicos: el gateway no exige JWT previo para estas RPCs.
+@Controller()
+@UseFilters(GrpcExceptionFilter)
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('register')
-  async register(@Body() body: { email: string; password: string; full_name: string }) {
-    return this.authService.register(body.email, body.password, body.full_name);
+  @GrpcMethod('AuthService', 'Register')
+  async register(data: { email: string; password: string; full_name: string }) {
+    return this.authService.register(data.email, data.password, data.full_name);
   }
 
-  @Post('login')
-  @HttpCode(200)
-  async login(
-    @Body() body: { email: string; password: string },
-    @Res({ passthrough: true }) res: Response,
-  ) {
-    const result = await this.authService.login(body.email, body.password);
-
-    // Session Cookie HttpOnly + Secure (requisito de la práctica)
-    res.cookie('session_token', result.token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 8 * 60 * 60 * 1000, // 8 horas en ms
-    });
-
-    return result;
+  @GrpcMethod('AuthService', 'Login')
+  async login(data: { email: string; password: string }) {
+    // La Session Cookie HttpOnly+Secure (requisito de la práctica) la setea el
+    // api-gateway, único componente que le habla HTTP al navegador. Este RPC
+    // solo genera el JWT — un microservicio gRPC no tiene noción de cookies.
+    return this.authService.login(data.email, data.password);
   }
 
-  @Post('logout')
-  @HttpCode(200)
-  async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
-    const token = req.headers.authorization?.split(' ')[1]
-                || req.cookies?.session_token;
-    if (token) await this.authService.logout(token);
-    res.clearCookie('session_token');
+  @GrpcMethod('AuthService', 'Logout')
+  async logout(data: { token: string }) {
+    if (data.token) await this.authService.logout(data.token);
     return { message: 'Sesión cerrada exitosamente' };
   }
 }

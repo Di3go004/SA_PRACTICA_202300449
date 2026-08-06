@@ -1,43 +1,36 @@
 // src/enrollments/enrollments.controller.ts
-import { Controller, Post, Delete, Get, Body, Param, UseGuards, Req } from '@nestjs/common';
+import { Controller, UseGuards, UseFilters } from '@nestjs/common';
+import { GrpcMethod } from '@nestjs/microservices';
 import { EnrollmentsService } from './enrollments.service';
-import { JwtAuthGuard } from '../middleware/jwt.guard';
-import { RolesGuard } from '../middleware/roles.guard';
+import { GrpcAuthGuard } from '../middleware/grpc-auth.guard';
+import { GrpcRolesGuard } from '../middleware/grpc-roles.guard';
 import { Roles } from '../middleware/roles.decorator';
+import { GrpcExceptionFilter } from '../middleware/grpc-exception.filter';
 
-@Controller('enrollments')
-@UseGuards(JwtAuthGuard, RolesGuard)
+@Controller()
+@UseGuards(GrpcAuthGuard, GrpcRolesGuard)
+@UseFilters(GrpcExceptionFilter)
 export class EnrollmentsController {
   constructor(private readonly enrollmentsService: EnrollmentsService) {}
 
-  @Post()
+  @GrpcMethod('CatalogService', 'EnrollStudent')
   @Roles('administrador')
-  async enrollStudent(
-    @Body() body: { student_id: number; course_id: number },
-    @Req() req: any,
-  ) {
-    return this.enrollmentsService.enrollStudent(
-      body.student_id,
-      body.course_id,
-      req.user.sub,
-    );
+  async enrollStudent(data: { student_id: number; course_id: number; __user?: any }) {
+    return this.enrollmentsService.enrollStudent(data.student_id, data.course_id, data.__user.sub);
   }
 
-  @Delete(':student_id/:course_id')
+  @GrpcMethod('CatalogService', 'UnenrollStudent')
   @Roles('administrador')
-  async unenrollStudent(
-    @Param('student_id') studentId: string,
-    @Param('course_id') courseId: string,
-  ) {
-    return this.enrollmentsService.unenrollStudent(
-      parseInt(studentId),
-      parseInt(courseId),
-    );
+  async unenrollStudent(data: { student_id: number; course_id: number }) {
+    return this.enrollmentsService.unenrollStudent(data.student_id, data.course_id);
   }
 
-  @Get('my-courses')
+  @GrpcMethod('CatalogService', 'GetMyCourses')
   @Roles('estudiante')
-  async getMyCourses(@Req() req: any) {
-    return this.enrollmentsService.getStudentCourses(req.user.sub);
+  async getMyCourses(data: { student_id?: number; __user?: any }) {
+    // Igual que en la versión REST: el id sale del JWT verificado (__user.sub),
+    // nunca del campo student_id del request (evita que un cliente pida cursos ajenos).
+    const courses = await this.enrollmentsService.getStudentCourses(data.__user.sub);
+    return { json: JSON.stringify(courses) };
   }
 }

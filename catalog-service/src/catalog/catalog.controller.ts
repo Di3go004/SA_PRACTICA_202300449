@@ -1,43 +1,49 @@
 // src/catalog/catalog.controller.ts
-import { Controller, Get, Query, Param, UseGuards, Req } from '@nestjs/common';
+import { Controller, UseGuards, UseFilters } from '@nestjs/common';
+import { GrpcMethod } from '@nestjs/microservices';
 import { CatalogService } from './catalog.service';
-import { JwtAuthGuard } from '../middleware/jwt.guard';
+import { GrpcAuthGuard } from '../middleware/grpc-auth.guard';
+import { GrpcExceptionFilter } from '../middleware/grpc-exception.filter';
 
-@Controller('catalog')
-@UseGuards(JwtAuthGuard)
+@Controller()
+@UseGuards(GrpcAuthGuard)
+@UseFilters(GrpcExceptionFilter)
 export class CatalogController {
   constructor(private readonly catalogService: CatalogService) {}
 
-  @Get()
-  async getCatalog(
-    @Req() req: any,
-    @Query('semester') semester?: string,
-    @Query('year') year?: string,
-    @Query('school_id') schoolId?: string,
-    @Query('course_id') courseId?: string,
-    @Query('teacher_id') teacherId?: string,
-    @Query('tag') tag?: string,
-    @Query('search') search?: string,
-    @Query('page') page = '1',
-    @Query('limit') limit = '20',
-  ) {
-    const filters = { semester, year, schoolId, courseId, teacherId, tag, search };
-    const pagination = { page: parseInt(page), limit: parseInt(limit) };
-    return this.catalogService.getCatalog(req.user, filters, pagination);
+  @GrpcMethod('CatalogService', 'GetCatalog')
+  async getCatalog(data: any) {
+    const user = { sub: data.__user.sub, role: data.__user.role };
+    const filters = {
+      semester: data.semester || undefined,
+      year: data.year || undefined,
+      schoolId: data.school_id || undefined,
+      courseId: data.course_id || undefined,
+      teacherId: data.teacher_id || undefined,
+      tag: data.tag || undefined,
+      search: data.search || undefined,
+    };
+    const pagination = { page: data.page || 1, limit: data.limit || 20 };
+    const result = await this.catalogService.getCatalog(user, filters, pagination);
+    return { json: JSON.stringify(result) };
   }
 
-  @Get('schools')
+  @GrpcMethod('CatalogService', 'GetSchools')
   async getSchools() {
-    return this.catalogService.getSchools();
+    const schools = await this.catalogService.getSchools();
+    return { json: JSON.stringify(schools) };
   }
 
-  @Get('courses')
-  async getCourses(@Query('school_id') schoolId?: string) {
-    return this.catalogService.getCourses(schoolId);
+  @GrpcMethod('CatalogService', 'GetCourses')
+  async getCourses(data: { school_id?: string }) {
+    const courses = await this.catalogService.getCourses(data.school_id);
+    return { json: JSON.stringify(courses) };
   }
 
-  @Get(':id')
-  async getRecording(@Param('id') id: string, @Req() req: any) {
-    return this.catalogService.getRecordingById(parseInt(id), req.user);
+  @GrpcMethod('CatalogService', 'GetRecordingById')
+  async getRecording(data: { id: number; __user?: any }) {
+    const user = { sub: data.__user.sub, role: data.__user.role };
+    const recording = await this.catalogService.getRecordingById(data.id, user);
+    return { json: JSON.stringify(recording) };
   }
 }

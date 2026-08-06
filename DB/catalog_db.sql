@@ -5,6 +5,8 @@
 -- Dominio: Escuelas, Cursos, Grabaciones, Inscripciones
 -- ============================================================
 
+\connect yousac_catalog_db
+
 -- ── TABLAS ──────────────────────────────────────────────────
 
 CREATE TABLE schools (

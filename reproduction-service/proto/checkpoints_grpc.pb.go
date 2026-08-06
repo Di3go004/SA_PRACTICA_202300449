@@ -20,17 +20,32 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	ReproduccionService_GetCheckpoint_FullMethodName   = "/reproduccion.ReproduccionService/GetCheckpoint"
+	ReproduccionService_SaveCheckpoint_FullMethodName  = "/reproduccion.ReproduccionService/SaveCheckpoint"
 	ReproduccionService_GetVideoStats_FullMethodName   = "/reproduccion.ReproduccionService/GetVideoStats"
+	ReproduccionService_SaveRating_FullMethodName      = "/reproduccion.ReproduccionService/SaveRating"
+	ReproduccionService_GetRatingStats_FullMethodName  = "/reproduccion.ReproduccionService/GetRatingStats"
 	ReproduccionService_GetUserProgress_FullMethodName = "/reproduccion.ReproduccionService/GetUserProgress"
+	ReproduccionService_StartSession_FullMethodName    = "/reproduccion.ReproduccionService/StartSession"
+	ReproduccionService_RecordEvent_FullMethodName     = "/reproduccion.ReproduccionService/RecordEvent"
 )
 
 // ReproduccionServiceClient is the client API for ReproduccionService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+//
+// Contrato gRPC unificado del microservicio de Reproducción (Go). Dos consumidores:
+// api-gateway (todas las RPCs, ya que /api/videos, /api/checkpoints y /api/ratings
+// dejaron de ser REST) y analytics-service (GetVideoStats/GetUserProgress, para
+// sincronizar sus métricas propias en MySQL).
 type ReproduccionServiceClient interface {
 	GetCheckpoint(ctx context.Context, in *CheckpointRequest, opts ...grpc.CallOption) (*CheckpointResponse, error)
+	SaveCheckpoint(ctx context.Context, in *SaveCheckpointRequest, opts ...grpc.CallOption) (*CheckpointResponse, error)
 	GetVideoStats(ctx context.Context, in *VideoStatsRequest, opts ...grpc.CallOption) (*VideoStatsResponse, error)
+	SaveRating(ctx context.Context, in *SaveRatingRequest, opts ...grpc.CallOption) (*RatingStatsResponse, error)
+	GetRatingStats(ctx context.Context, in *VideoStatsRequest, opts ...grpc.CallOption) (*RatingStatsResponse, error)
 	GetUserProgress(ctx context.Context, in *UserProgressRequest, opts ...grpc.CallOption) (*UserProgressResponse, error)
+	StartSession(ctx context.Context, in *StartSessionRequest, opts ...grpc.CallOption) (*StartSessionResponse, error)
+	RecordEvent(ctx context.Context, in *RecordEventRequest, opts ...grpc.CallOption) (*Ack, error)
 }
 
 type reproduccionServiceClient struct {
@@ -51,10 +66,40 @@ func (c *reproduccionServiceClient) GetCheckpoint(ctx context.Context, in *Check
 	return out, nil
 }
 
+func (c *reproduccionServiceClient) SaveCheckpoint(ctx context.Context, in *SaveCheckpointRequest, opts ...grpc.CallOption) (*CheckpointResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CheckpointResponse)
+	err := c.cc.Invoke(ctx, ReproduccionService_SaveCheckpoint_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *reproduccionServiceClient) GetVideoStats(ctx context.Context, in *VideoStatsRequest, opts ...grpc.CallOption) (*VideoStatsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(VideoStatsResponse)
 	err := c.cc.Invoke(ctx, ReproduccionService_GetVideoStats_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *reproduccionServiceClient) SaveRating(ctx context.Context, in *SaveRatingRequest, opts ...grpc.CallOption) (*RatingStatsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RatingStatsResponse)
+	err := c.cc.Invoke(ctx, ReproduccionService_SaveRating_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *reproduccionServiceClient) GetRatingStats(ctx context.Context, in *VideoStatsRequest, opts ...grpc.CallOption) (*RatingStatsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RatingStatsResponse)
+	err := c.cc.Invoke(ctx, ReproduccionService_GetRatingStats_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -71,13 +116,43 @@ func (c *reproduccionServiceClient) GetUserProgress(ctx context.Context, in *Use
 	return out, nil
 }
 
+func (c *reproduccionServiceClient) StartSession(ctx context.Context, in *StartSessionRequest, opts ...grpc.CallOption) (*StartSessionResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(StartSessionResponse)
+	err := c.cc.Invoke(ctx, ReproduccionService_StartSession_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *reproduccionServiceClient) RecordEvent(ctx context.Context, in *RecordEventRequest, opts ...grpc.CallOption) (*Ack, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Ack)
+	err := c.cc.Invoke(ctx, ReproduccionService_RecordEvent_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ReproduccionServiceServer is the server API for ReproduccionService service.
 // All implementations must embed UnimplementedReproduccionServiceServer
 // for forward compatibility.
+//
+// Contrato gRPC unificado del microservicio de Reproducción (Go). Dos consumidores:
+// api-gateway (todas las RPCs, ya que /api/videos, /api/checkpoints y /api/ratings
+// dejaron de ser REST) y analytics-service (GetVideoStats/GetUserProgress, para
+// sincronizar sus métricas propias en MySQL).
 type ReproduccionServiceServer interface {
 	GetCheckpoint(context.Context, *CheckpointRequest) (*CheckpointResponse, error)
+	SaveCheckpoint(context.Context, *SaveCheckpointRequest) (*CheckpointResponse, error)
 	GetVideoStats(context.Context, *VideoStatsRequest) (*VideoStatsResponse, error)
+	SaveRating(context.Context, *SaveRatingRequest) (*RatingStatsResponse, error)
+	GetRatingStats(context.Context, *VideoStatsRequest) (*RatingStatsResponse, error)
 	GetUserProgress(context.Context, *UserProgressRequest) (*UserProgressResponse, error)
+	StartSession(context.Context, *StartSessionRequest) (*StartSessionResponse, error)
+	RecordEvent(context.Context, *RecordEventRequest) (*Ack, error)
 	mustEmbedUnimplementedReproduccionServiceServer()
 }
 
@@ -91,11 +166,26 @@ type UnimplementedReproduccionServiceServer struct{}
 func (UnimplementedReproduccionServiceServer) GetCheckpoint(context.Context, *CheckpointRequest) (*CheckpointResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetCheckpoint not implemented")
 }
+func (UnimplementedReproduccionServiceServer) SaveCheckpoint(context.Context, *SaveCheckpointRequest) (*CheckpointResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method SaveCheckpoint not implemented")
+}
 func (UnimplementedReproduccionServiceServer) GetVideoStats(context.Context, *VideoStatsRequest) (*VideoStatsResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetVideoStats not implemented")
 }
+func (UnimplementedReproduccionServiceServer) SaveRating(context.Context, *SaveRatingRequest) (*RatingStatsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method SaveRating not implemented")
+}
+func (UnimplementedReproduccionServiceServer) GetRatingStats(context.Context, *VideoStatsRequest) (*RatingStatsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetRatingStats not implemented")
+}
 func (UnimplementedReproduccionServiceServer) GetUserProgress(context.Context, *UserProgressRequest) (*UserProgressResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetUserProgress not implemented")
+}
+func (UnimplementedReproduccionServiceServer) StartSession(context.Context, *StartSessionRequest) (*StartSessionResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method StartSession not implemented")
+}
+func (UnimplementedReproduccionServiceServer) RecordEvent(context.Context, *RecordEventRequest) (*Ack, error) {
+	return nil, status.Error(codes.Unimplemented, "method RecordEvent not implemented")
 }
 func (UnimplementedReproduccionServiceServer) mustEmbedUnimplementedReproduccionServiceServer() {}
 func (UnimplementedReproduccionServiceServer) testEmbeddedByValue()                             {}
@@ -136,6 +226,24 @@ func _ReproduccionService_GetCheckpoint_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ReproduccionService_SaveCheckpoint_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SaveCheckpointRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ReproduccionServiceServer).SaveCheckpoint(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ReproduccionService_SaveCheckpoint_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ReproduccionServiceServer).SaveCheckpoint(ctx, req.(*SaveCheckpointRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ReproduccionService_GetVideoStats_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(VideoStatsRequest)
 	if err := dec(in); err != nil {
@@ -150,6 +258,42 @@ func _ReproduccionService_GetVideoStats_Handler(srv interface{}, ctx context.Con
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ReproduccionServiceServer).GetVideoStats(ctx, req.(*VideoStatsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ReproduccionService_SaveRating_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SaveRatingRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ReproduccionServiceServer).SaveRating(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ReproduccionService_SaveRating_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ReproduccionServiceServer).SaveRating(ctx, req.(*SaveRatingRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ReproduccionService_GetRatingStats_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(VideoStatsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ReproduccionServiceServer).GetRatingStats(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ReproduccionService_GetRatingStats_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ReproduccionServiceServer).GetRatingStats(ctx, req.(*VideoStatsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -172,6 +316,42 @@ func _ReproduccionService_GetUserProgress_Handler(srv interface{}, ctx context.C
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ReproduccionService_StartSession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(StartSessionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ReproduccionServiceServer).StartSession(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ReproduccionService_StartSession_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ReproduccionServiceServer).StartSession(ctx, req.(*StartSessionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ReproduccionService_RecordEvent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RecordEventRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ReproduccionServiceServer).RecordEvent(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ReproduccionService_RecordEvent_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ReproduccionServiceServer).RecordEvent(ctx, req.(*RecordEventRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ReproduccionService_ServiceDesc is the grpc.ServiceDesc for ReproduccionService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -184,12 +364,32 @@ var ReproduccionService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ReproduccionService_GetCheckpoint_Handler,
 		},
 		{
+			MethodName: "SaveCheckpoint",
+			Handler:    _ReproduccionService_SaveCheckpoint_Handler,
+		},
+		{
 			MethodName: "GetVideoStats",
 			Handler:    _ReproduccionService_GetVideoStats_Handler,
 		},
 		{
+			MethodName: "SaveRating",
+			Handler:    _ReproduccionService_SaveRating_Handler,
+		},
+		{
+			MethodName: "GetRatingStats",
+			Handler:    _ReproduccionService_GetRatingStats_Handler,
+		},
+		{
 			MethodName: "GetUserProgress",
 			Handler:    _ReproduccionService_GetUserProgress_Handler,
+		},
+		{
+			MethodName: "StartSession",
+			Handler:    _ReproduccionService_StartSession_Handler,
+		},
+		{
+			MethodName: "RecordEvent",
+			Handler:    _ReproduccionService_RecordEvent_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

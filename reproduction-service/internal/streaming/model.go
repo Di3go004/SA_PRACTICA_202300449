@@ -2,8 +2,8 @@
 package streaming
 
 import (
-	"time"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"time"
 )
 
 type PlaybackSession struct {
@@ -11,9 +11,13 @@ type PlaybackSession struct {
 	UserID    int                `bson:"user_id"       json:"user_id"`
 	VideoID   int                `bson:"video_id"      json:"video_id"`
 	StartedAt time.Time          `bson:"started_at"    json:"started_at"`
-	EndedAt   *time.Time         `bson:"ended_at"      json:"ended_at"`
-	Events    []PlaybackEvent    `bson:"events"        json:"events"`
-	Resolution string            `bson:"resolution"    json:"resolution"`
+	// omitempty: un *time.Time nil sin omitempty serializa como BSON null, y el
+	// validador $jsonSchema de playback_sessions exige bsonType "date" para este
+	// campo cuando está presente (aunque no sea "required") — omitirlo evita el
+	// rechazo de Mongo al crear una sesión que todavía no terminó.
+	EndedAt    *time.Time      `bson:"ended_at,omitempty" json:"ended_at"`
+	Events     []PlaybackEvent `bson:"events"        json:"events"`
+	Resolution string          `bson:"resolution"    json:"resolution"`
 }
 
 type PlaybackEvent struct {

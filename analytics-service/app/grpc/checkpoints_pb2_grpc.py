@@ -26,7 +26,11 @@ if _version_not_supported:
 
 
 class ReproduccionServiceStub:
-    """Missing associated documentation comment in .proto file."""
+    """Contrato gRPC unificado del microservicio de Reproducción (Go). Dos consumidores:
+    api-gateway (todas las RPCs, ya que /api/videos, /api/checkpoints y /api/ratings
+    dejaron de ser REST) y analytics-service (GetVideoStats/GetUserProgress, para
+    sincronizar sus métricas propias en MySQL).
+    """
 
     def __init__(self, channel):
         """Constructor.
@@ -39,22 +43,57 @@ class ReproduccionServiceStub:
                 request_serializer=checkpoints__pb2.CheckpointRequest.SerializeToString,
                 response_deserializer=checkpoints__pb2.CheckpointResponse.FromString,
                 _registered_method=True)
+        self.SaveCheckpoint = channel.unary_unary(
+                '/reproduccion.ReproduccionService/SaveCheckpoint',
+                request_serializer=checkpoints__pb2.SaveCheckpointRequest.SerializeToString,
+                response_deserializer=checkpoints__pb2.CheckpointResponse.FromString,
+                _registered_method=True)
         self.GetVideoStats = channel.unary_unary(
                 '/reproduccion.ReproduccionService/GetVideoStats',
                 request_serializer=checkpoints__pb2.VideoStatsRequest.SerializeToString,
                 response_deserializer=checkpoints__pb2.VideoStatsResponse.FromString,
+                _registered_method=True)
+        self.SaveRating = channel.unary_unary(
+                '/reproduccion.ReproduccionService/SaveRating',
+                request_serializer=checkpoints__pb2.SaveRatingRequest.SerializeToString,
+                response_deserializer=checkpoints__pb2.RatingStatsResponse.FromString,
+                _registered_method=True)
+        self.GetRatingStats = channel.unary_unary(
+                '/reproduccion.ReproduccionService/GetRatingStats',
+                request_serializer=checkpoints__pb2.VideoStatsRequest.SerializeToString,
+                response_deserializer=checkpoints__pb2.RatingStatsResponse.FromString,
                 _registered_method=True)
         self.GetUserProgress = channel.unary_unary(
                 '/reproduccion.ReproduccionService/GetUserProgress',
                 request_serializer=checkpoints__pb2.UserProgressRequest.SerializeToString,
                 response_deserializer=checkpoints__pb2.UserProgressResponse.FromString,
                 _registered_method=True)
+        self.StartSession = channel.unary_unary(
+                '/reproduccion.ReproduccionService/StartSession',
+                request_serializer=checkpoints__pb2.StartSessionRequest.SerializeToString,
+                response_deserializer=checkpoints__pb2.StartSessionResponse.FromString,
+                _registered_method=True)
+        self.RecordEvent = channel.unary_unary(
+                '/reproduccion.ReproduccionService/RecordEvent',
+                request_serializer=checkpoints__pb2.RecordEventRequest.SerializeToString,
+                response_deserializer=checkpoints__pb2.Ack.FromString,
+                _registered_method=True)
 
 
 class ReproduccionServiceServicer:
-    """Missing associated documentation comment in .proto file."""
+    """Contrato gRPC unificado del microservicio de Reproducción (Go). Dos consumidores:
+    api-gateway (todas las RPCs, ya que /api/videos, /api/checkpoints y /api/ratings
+    dejaron de ser REST) y analytics-service (GetVideoStats/GetUserProgress, para
+    sincronizar sus métricas propias en MySQL).
+    """
 
     def GetCheckpoint(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def SaveCheckpoint(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -66,7 +105,31 @@ class ReproduccionServiceServicer:
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def SaveRating(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetRatingStats(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def GetUserProgress(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def StartSession(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def RecordEvent(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -80,15 +143,40 @@ def add_ReproduccionServiceServicer_to_server(servicer, server):
                     request_deserializer=checkpoints__pb2.CheckpointRequest.FromString,
                     response_serializer=checkpoints__pb2.CheckpointResponse.SerializeToString,
             ),
+            'SaveCheckpoint': grpc.unary_unary_rpc_method_handler(
+                    servicer.SaveCheckpoint,
+                    request_deserializer=checkpoints__pb2.SaveCheckpointRequest.FromString,
+                    response_serializer=checkpoints__pb2.CheckpointResponse.SerializeToString,
+            ),
             'GetVideoStats': grpc.unary_unary_rpc_method_handler(
                     servicer.GetVideoStats,
                     request_deserializer=checkpoints__pb2.VideoStatsRequest.FromString,
                     response_serializer=checkpoints__pb2.VideoStatsResponse.SerializeToString,
             ),
+            'SaveRating': grpc.unary_unary_rpc_method_handler(
+                    servicer.SaveRating,
+                    request_deserializer=checkpoints__pb2.SaveRatingRequest.FromString,
+                    response_serializer=checkpoints__pb2.RatingStatsResponse.SerializeToString,
+            ),
+            'GetRatingStats': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetRatingStats,
+                    request_deserializer=checkpoints__pb2.VideoStatsRequest.FromString,
+                    response_serializer=checkpoints__pb2.RatingStatsResponse.SerializeToString,
+            ),
             'GetUserProgress': grpc.unary_unary_rpc_method_handler(
                     servicer.GetUserProgress,
                     request_deserializer=checkpoints__pb2.UserProgressRequest.FromString,
                     response_serializer=checkpoints__pb2.UserProgressResponse.SerializeToString,
+            ),
+            'StartSession': grpc.unary_unary_rpc_method_handler(
+                    servicer.StartSession,
+                    request_deserializer=checkpoints__pb2.StartSessionRequest.FromString,
+                    response_serializer=checkpoints__pb2.StartSessionResponse.SerializeToString,
+            ),
+            'RecordEvent': grpc.unary_unary_rpc_method_handler(
+                    servicer.RecordEvent,
+                    request_deserializer=checkpoints__pb2.RecordEventRequest.FromString,
+                    response_serializer=checkpoints__pb2.Ack.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -99,7 +187,11 @@ def add_ReproduccionServiceServicer_to_server(servicer, server):
 
  # This class is part of an EXPERIMENTAL API.
 class ReproduccionService:
-    """Missing associated documentation comment in .proto file."""
+    """Contrato gRPC unificado del microservicio de Reproducción (Go). Dos consumidores:
+    api-gateway (todas las RPCs, ya que /api/videos, /api/checkpoints y /api/ratings
+    dejaron de ser REST) y analytics-service (GetVideoStats/GetUserProgress, para
+    sincronizar sus métricas propias en MySQL).
+    """
 
     @staticmethod
     def GetCheckpoint(request,
@@ -117,6 +209,33 @@ class ReproduccionService:
             target,
             '/reproduccion.ReproduccionService/GetCheckpoint',
             checkpoints__pb2.CheckpointRequest.SerializeToString,
+            checkpoints__pb2.CheckpointResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def SaveCheckpoint(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/reproduccion.ReproduccionService/SaveCheckpoint',
+            checkpoints__pb2.SaveCheckpointRequest.SerializeToString,
             checkpoints__pb2.CheckpointResponse.FromString,
             options,
             channel_credentials,
@@ -156,6 +275,60 @@ class ReproduccionService:
             _registered_method=True)
 
     @staticmethod
+    def SaveRating(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/reproduccion.ReproduccionService/SaveRating',
+            checkpoints__pb2.SaveRatingRequest.SerializeToString,
+            checkpoints__pb2.RatingStatsResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def GetRatingStats(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/reproduccion.ReproduccionService/GetRatingStats',
+            checkpoints__pb2.VideoStatsRequest.SerializeToString,
+            checkpoints__pb2.RatingStatsResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
     def GetUserProgress(request,
             target,
             options=(),
@@ -172,6 +345,60 @@ class ReproduccionService:
             '/reproduccion.ReproduccionService/GetUserProgress',
             checkpoints__pb2.UserProgressRequest.SerializeToString,
             checkpoints__pb2.UserProgressResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def StartSession(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/reproduccion.ReproduccionService/StartSession',
+            checkpoints__pb2.StartSessionRequest.SerializeToString,
+            checkpoints__pb2.StartSessionResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def RecordEvent(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/reproduccion.ReproduccionService/RecordEvent',
+            checkpoints__pb2.RecordEventRequest.SerializeToString,
+            checkpoints__pb2.Ack.FromString,
             options,
             channel_credentials,
             insecure,
